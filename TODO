@@ -1,6 +1,8 @@
 TODO
 ---
+ - add min and max icons for nodes
  - add the ability to export to a separate json file that they can save.
+	- open new tab with json and having json prefix
  - add autosave to local storage
  - add the ability to hook into a JSON of the JSON files to work on
 	- add a sortof filesystem

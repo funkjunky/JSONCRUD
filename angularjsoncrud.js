@@ -22,6 +22,10 @@ function jsoncrudctrl($scope, $location)
 			return 1; //arbitrarily small number?
 	};
 	$scope.stringify = stringify;
+	$scope.addToArray = function(arr) {
+		arr.push({___VALUE___: ""});
+	}
+	$scope.isArray = Array.isArray;
 }
 
 //puts all leafs into objects with the key __value__ so i can reference them in angular.

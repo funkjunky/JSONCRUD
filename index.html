@@ -9,6 +9,7 @@
 			<textarea ng-if="isLeaf(value)" ng-show="strlen(value) >= 20" ng-model="value.___VALUE___"></textarea>
 			<ul ng-if="!isLeaf(value)">
 				<li ng-repeat="(key,value) in value" ng-include="'node.html'"></li>
+				<button ng-if="isArray(value)" type="button" ng-click="addToArray(value)">Add Element</button>
 			</ul>
 		</script>
 	</head>
