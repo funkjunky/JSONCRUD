@@ -10,18 +10,16 @@ function jsoncrudctrl($scope, $location)
 		field2: "loremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsum",
 	};
 	json = referencify(json);
-	console.log(json);
-	console.log(JSON.parse(stringify(json)));
 	$scope.json = json;
 	$scope.isLeaf = function(obj) {
-		return (obj.___VALUE___)?true:false;
+		return (obj.___VALUE___ !== undefined)?true:false;
 	};
 	$scope.strlen = function(obj) {
 		var val = obj.___VALUE___;
 		if(typeof val === 'string')
 			return val.length;
-		else //is a number or float?
-			return 5; //arbitrarily small number?
+		else //is a number
+			return 1; //arbitrarily small number?
 	};
 	$scope.stringify = stringify;
 }
@@ -45,60 +43,38 @@ function stringify(json, tabs)
 	if(!tabs)
 		tabs = 1;
 
-	if(json.___VALUE___)
+	if(json.___VALUE___ !== undefined)
 		return (typeof json.___VALUE___ === 'string')
 			? '"' + json.___VALUE___ + '"'
 			: json.___VALUE___;
 
 	var str = "";
-	if(Array.isArray(json))
+	if(Array.isArray(json)) //arrays use [] and write value,
 	{
 		str = '[\n';
 		for(var i=0; i!=json.length; ++i)
-		{
-			for(var k=0; k!=tabs; ++k)
-				str += '\t';
-			str += stringify(json[i], tabs+1) + ',\n';
-		}
+			str += ntimes('\t', tabs) + stringify(json[i], tabs+1) + ',\n';
 
-		//remove last comma
 		str = str.substr(0,str.length-2) + '\n';
-
-		for(var i=0; i!=tabs-1; ++i)
-			str += '\t';
-		str += ']';
+		str += ntimes('\t', tabs-1) + ']';
 	}
-	else
+	else //objects use {} and write "key": value,
 	{
 		str = '{\n';
 		for(var key in json)
 			if(key != '$$hashkey') //no idea where that key is coming from
-			{
-				for(var i=0; i!=tabs; ++i)
-					str += '\t';
-				str += '"' + key + '": ' + stringify(json[key], tabs+1) + ',\n';
-			}
+				str += ntimes('\t', tabs) + '"' + key + '": ' + stringify(json[key], tabs+1) + ',\n';
 
-		//remove last comma
 		str = str.substr(0,str.length-2) + '\n';
-
-		for(var i=0; i!=tabs-1; ++i)
-			str += '\t';
-		str += '}';
+		str += ntimes('\t', tabs-1) + '}';
 	}
 
 	return str;
 }
-
-//TODO: remove
-function unreferencify(json)
+function ntimes(str, times)
 {
-	console.log("in unreferencify");
-	if(json["___VALUE___"])
-		return json["___VALUE___"];
-	for(var key in json)
-		if(key !== "___VALUE___")
-			json[key] = referencify(json[key]);
-
-	return json;
+	var ret = "";
+	for(var i=0; i!=times; ++i)
+		ret += str;
+	return ret;
 }
