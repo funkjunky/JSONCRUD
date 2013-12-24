@@ -1,0 +1,21 @@
+<html ng-app>
+	<head>
+		<title>JSON CRUD</title>
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js"></script>
+		<script src="angularjsoncrud.js"></script>
+		<script type="text/ng-template" id="node.html">
+			<label for="{{key}}">{{key}}:</label>
+			<input ng-if="isLeaf(value)" ng-show="strlen(value) < 20" ng-model="value.___VALUE___" />
+			<textarea ng-if="isLeaf(value)" ng-show="strlen(value) >= 20" ng-model="value.___VALUE___"></textarea>
+			<ul ng-if="!isLeaf(value)">
+				<li ng-repeat="(key,value) in value" ng-include="'node.html'"></li>
+			</ul>
+		</script>
+	</head>
+	<body ng-app="Application" ng-controller="jsoncrudctrl">
+		<ul>
+			<li ng-repeat="(key,value) in json" ng-include="'node.html'"></li>
+		</ul>
+		<pre>{{stringify(json)}}</pre>
+	</body>
+</html>

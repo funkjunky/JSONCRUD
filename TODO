@@ -1,0 +1,7 @@
+TODO
+---
+ - add the ability to export to a separate json file that they can save.
+ - add autosave to local storage
+ - add the ability to hook into a JSON of the JSON files to work on
+	- add a sortof filesystem
+ - somehow package this? People should be able to very easily use it for their own use somewhere in a website.
