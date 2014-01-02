@@ -25,7 +25,9 @@ function jsoncrudctrl($scope, $location)
 	$scope.addToArray = function(arr) {
 		arr.push({___VALUE___: ""});
 	}
-	$scope.isArray = Array.isArray;
+	$scope.isArrayElement = function(obj) {
+		return (obj.___ISARRAY___)?true:false;
+	};
 }
 
 //puts all leafs into objects with the key __value__ so i can reference them in angular.
@@ -33,10 +35,15 @@ function referencify(json)
 {
 	for(var key in json)
 	{
-		if(angular.isObject(json[key]))
+		if(angular.isObject(json[key])) {
 			json[key] = referencify(json[key]);
+			json[key]["___KEY___"] = key;
+		}
 		else
-			json[key] = {"___VALUE___": json[key]};
+			json[key] = {"___VALUE___": json[key], "___KEY___": key};
+
+		if(Array.isArray(json))
+			json[key]["___ISARRAY___"] = true;
 	}
 
 	return json;
@@ -66,8 +73,8 @@ function stringify(json, tabs)
 	{
 		str = '{\n';
 		for(var key in json)
-			if(key != '$$hashkey') //no idea where that key is coming from
-				str += ntimes('\t', tabs) + '"' + key + '": ' + stringify(json[key], tabs+1) + ',\n';
+			if(key != '$$hashkey' && key != '___KEY___') //no idea where that key is coming from
+				str += ntimes('\t', tabs) + '"' + json[key].___KEY___ + '": ' + stringify(json[key], tabs+1) + ',\n';
 
 		str = str.substr(0,str.length-2) + '\n';
 		str += ntimes('\t', tabs-1) + '}';

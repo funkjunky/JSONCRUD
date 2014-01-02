@@ -1,6 +1,21 @@
 TODO
 ---
  - add min and max icons for nodes
+ - everything should be deletable
+	- anything with a child should have a confirmation prompt
+ - add a count for arrays and object [ie. 6 kweys, or 19 elements]
+ - have an input at the top to put a url and a load button to load the json from that.
+ - add a settings object somewhere that seems correct for settings
+ - use content editable instead of inputs
+ - autoamtically turn valid urls into anchor tags
+ - add a setting for automatically minimizing a certain number of elements if on key has too many
+ - add a setting for the number of nodes to load before adding pagination
+ - add pagination.
+ - add settings
+	- automatically turning urls into anchor tags
+	- editing keys, adding elements to objects, adding elements to arrays
+ - Ask where we should save it
+ - clean up the code.
  - add the ability to export to a separate json file that they can save.
 	- open new tab with json and having json prefix
  - add autosave to local storage

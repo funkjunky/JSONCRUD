@@ -4,12 +4,12 @@
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js"></script>
 		<script src="angularjsoncrud.js"></script>
 		<script type="text/ng-template" id="node.html">
-			<label for="{{key}}">{{key}}:</label>
+			<input ng-model="value.___KEY___" ng-if="!isArrayElement(value)" />
 			<input ng-if="isLeaf(value)" ng-show="strlen(value) < 20" ng-model="value.___VALUE___" />
 			<textarea ng-if="isLeaf(value)" ng-show="strlen(value) >= 20" ng-model="value.___VALUE___"></textarea>
 			<ul ng-if="!isLeaf(value)">
-				<li ng-repeat="(key,value) in value" ng-include="'node.html'"></li>
-				<button ng-if="isArray(value)" type="button" ng-click="addToArray(value)">Add Element</button>
+				<li ng-repeat="(key,value) in value" ng-if="key != '___KEY___' && key != '___ISARRAY___'" ng-include="'node.html'"></li>
+				<button type="button" ng-click="addToArray(value)">Add Element</button>
 			</ul>
 		</script>
 	</head>
