@@ -28,6 +28,11 @@ function jsoncrudctrl($scope, $location)
 	$scope.isArrayElement = function(obj) {
 		return (obj.___ISARRAY___)?true:false;
 	};
+	$scope.isArray = Array.isArray;
+	$scope.minmax = function(self) {
+		console.log(self);
+		$(self).siblings("ul").toggle();
+	};
 }
 
 //puts all leafs into objects with the key __value__ so i can reference them in angular.

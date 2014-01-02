@@ -1,15 +1,18 @@
 <html ng-app>
 	<head>
 		<title>JSON CRUD</title>
+		<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js"></script>
 		<script src="angularjsoncrud.js"></script>
 		<script type="text/ng-template" id="node.html">
-			<input ng-model="value.___KEY___" ng-if="!isArrayElement(value)" />
+			<button ng-click="minimized = !minimized" ng-show="!isLeaf(value)" ng-init="minimized=false" ng-class="{'glyphicon glyphicon-plus': minimized, 'glyphicon glyphicon-minus': !minimized}">-</button><input ng-model="value.___KEY___" ng-if="!isArrayElement(value)" />
 			<input ng-if="isLeaf(value)" ng-show="strlen(value) < 20" ng-model="value.___VALUE___" />
 			<textarea ng-if="isLeaf(value)" ng-show="strlen(value) >= 20" ng-model="value.___VALUE___"></textarea>
-			<ul ng-if="!isLeaf(value)">
+			<ul ng-if="!isLeaf(value)" ng-show="!minimized">
 				<li ng-repeat="(key,value) in value" ng-if="key != '___KEY___' && key != '___ISARRAY___'" ng-include="'node.html'"></li>
-				<button type="button" ng-click="addToArray(value)">Add Element</button>
+				<button type="button" ng-if="isArray(value)" ng-click="addToArray(value)">Add Element</button>
 			</ul>
 		</script>
 	</head>

@@ -1,6 +1,5 @@
 TODO
 ---
- - add min and max icons for nodes
  - everything should be deletable
 	- anything with a child should have a confirmation prompt
  - add a count for arrays and object [ie. 6 kweys, or 19 elements]
@@ -16,6 +15,13 @@ TODO
 	- editing keys, adding elements to objects, adding elements to arrays
  - Ask where we should save it
  - clean up the code.
+ - make things fully editable
+	- be able to add a new key value field to an object
+		- just se thte key to key1, key2, etc, until one is free
+	- be able to add a new object value to an object
+		-so it will basically add the key, using the same system as above and add the add buttons.
+	- be able to add a new array value to an object
+ - we should highlight the key and focus it when a new object is added, or same with element in array
  - add the ability to export to a separate json file that they can save.
 	- open new tab with json and having json prefix
  - add autosave to local storage
