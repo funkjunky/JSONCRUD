@@ -1,4 +1,4 @@
-function jsoncrudctrl($scope, $location)
+function jsoncrudctrl($scope, $location, $http)
 {
 	var json = {
 		field1: "some text",
@@ -29,9 +29,13 @@ function jsoncrudctrl($scope, $location)
 		return (obj.___ISARRAY___)?true:false;
 	};
 	$scope.isArray = Array.isArray;
-	$scope.minmax = function(self) {
-		console.log(self);
-		$(self).siblings("ul").toggle();
+	$scope.loadJson = function(jsonUrl) {
+		$http.get(jsonUrl).success(function(json) {
+			$scope.json = referencify(json);
+		}).error(function(err) {
+			console.log(err);
+			alert("loading the json failed");
+		});
 	};
 }
 

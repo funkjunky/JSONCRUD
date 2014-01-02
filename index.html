@@ -17,6 +17,7 @@
 		</script>
 	</head>
 	<body ng-app="Application" ng-controller="jsoncrudctrl">
+		<input type="text" ng-model="jsonUrl" /><button ng-click="loadJson(jsonUrl)">Load URL</button>
 		<ul>
 			<li ng-repeat="(key,value) in json" ng-include="'node.html'"></li>
 		</ul>
