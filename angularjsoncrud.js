@@ -10,7 +10,19 @@ function jsoncrudctrl($scope, $location, $http)
 		field2: "loremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsum",
 	};
 	json = referencify(json);
-	$scope.json = json;
+	$scope.logger = function(str) { console.log(str); };
+	$scope.objlength = function(obj) {
+		if(Array.isArray(obj))
+			return obj.length;
+		else {
+			var count = 0;
+			for(var key in obj)
+				++count;
+
+			return count;
+		}
+	};
+	$scope.value = json;
 	$scope.isLeaf = function(obj) {
 		return (obj.___VALUE___ !== undefined)?true:false;
 	};
@@ -25,18 +37,37 @@ function jsoncrudctrl($scope, $location, $http)
 	$scope.addToArray = function(arr) {
 		arr.push({___VALUE___: ""});
 	}
-	$scope.isArrayElement = function(obj) {
-		return (obj.___ISARRAY___)?true:false;
-	};
 	$scope.isArray = Array.isArray;
 	$scope.loadJson = function(jsonUrl) {
 		$http.get(jsonUrl).success(function(json) {
-			$scope.json = referencify(json);
+			$scope.value = referencify(json);
 		}).error(function(err) {
 			console.log(err);
 			alert("loading the json failed");
 		});
 	};
+	$scope.isUndefined = function(obj) {
+		return ((typeof obj == "undefined") ? true : false);
+	}
+	$scope.deleteElement = function(key, maybeparent, betterparent)
+	{
+		var obj;
+		if(betterparent)
+			obj = betterparent;
+		else
+			obj = maybeparent;
+
+		var confirmed = true;
+		if(!$scope.isLeaf(obj[key]))
+			confirmed = confirm("Are you sure you want to delete an object/array?");
+
+		if(confirmed) {
+			if(Array.isArray(obj))
+				obj.splice(key, 1);
+			else
+				delete obj[key];
+		}
+	}
 }
 
 //puts all leafs into objects with the key __value__ so i can reference them in angular.
@@ -50,9 +81,6 @@ function referencify(json)
 		}
 		else
 			json[key] = {"___VALUE___": json[key], "___KEY___": key};
-
-		if(Array.isArray(json))
-			json[key]["___ISARRAY___"] = true;
 	}
 
 	return json;

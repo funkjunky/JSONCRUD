@@ -7,9 +7,12 @@
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js"></script>
 		<script src="angularjsoncrud.js"></script>
 		<script type="text/ng-template" id="node.html">
-			<button ng-click="minimized = !minimized" ng-show="!isLeaf(value)" ng-init="minimized=false" ng-class="{'glyphicon glyphicon-plus': minimized, 'glyphicon glyphicon-minus': !minimized}">-</button><input ng-model="value.___KEY___" ng-if="!isArrayElement(value)" />
+			<button ng-click="minimized = !minimized" ng-show="!isLeaf(value)" ng-init="minimized=false" ng-class="{'glyphicon glyphicon-plus': minimized, 'glyphicon glyphicon-minus': !minimized}">-</button>
+			<input ng-model="value.___KEY___" ng-if="!isArray($parent.$parent.$parent.$parent.value) && !isUndefined(key)" />
 			<input ng-if="isLeaf(value)" ng-show="strlen(value) < 20" ng-model="value.___VALUE___" />
 			<textarea ng-if="isLeaf(value)" ng-show="strlen(value) >= 20" ng-model="value.___VALUE___"></textarea>
+			<button ng-click="deleteElement(key, $parent.$parent.value, $parent.$parent.$parent.value)" ng-if="!isUndefined(key)">[x]</button>
+			<span ng-if="!isLeaf(value)">Count: {{objlength(value)}}</span>
 			<ul ng-if="!isLeaf(value)" ng-show="!minimized">
 				<li ng-repeat="(key,value) in value" ng-if="key != '___KEY___' && key != '___ISARRAY___'" ng-include="'node.html'"></li>
 				<button type="button" ng-if="isArray(value)" ng-click="addToArray(value)">Add Element</button>
@@ -18,9 +21,7 @@
 	</head>
 	<body ng-app="Application" ng-controller="jsoncrudctrl">
 		<input type="text" ng-model="jsonUrl" /><button ng-click="loadJson(jsonUrl)">Load URL</button>
-		<ul>
-			<li ng-repeat="(key,value) in json" ng-include="'node.html'"></li>
-		</ul>
-		<pre>{{stringify(json)}}</pre>
+			<div ng-include="'node.html'"></div>
+		<pre>{{stringify(value)}}</pre>
 	</body>
 </html>

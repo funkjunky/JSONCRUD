@@ -1,11 +1,8 @@
 TODO
 ---
- - add a count for arrays and object [ie. 6 kweys, or 19 elements]
- - everything should be deletable
-	- anything with a child should have a confirmation prompt
- - add a settings object somewhere that seems correct for settings
  - use content editable instead of inputs
  - autoamtically turn valid urls into anchor tags
+ - add a settings object somewhere that seems correct for settings
  - add a setting for automatically minimizing a certain number of elements if on key has too many
  - add a setting for the number of nodes to load before adding pagination
  - add pagination.

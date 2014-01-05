@@ -1,0 +1,12 @@
+{
+	"jsonfile": "some text",
+	"array1": [
+		"an",
+		"array"
+	],
+	"obj1": {
+		"key1": 8,
+		"key2": "more text"
+	},
+	"field2": "loremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsum"
+}
