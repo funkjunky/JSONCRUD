@@ -1,7 +1,10 @@
 TODO
 ---
- - use content editable instead of inputs
+ - remove .___VALUE___ and use parent.value instead
  - autoamtically turn valid urls into anchor tags
+ - Format it all pretty using bootstrap, and using jsonblob as a reference.
+ - tesst with a saved version of a feed api json return.
+
  - add a settings object somewhere that seems correct for settings
  - add a setting for automatically minimizing a certain number of elements if on key has too many
  - add a setting for the number of nodes to load before adding pagination

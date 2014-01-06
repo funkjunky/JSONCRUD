@@ -1,4 +1,6 @@
-function jsoncrudctrl($scope, $location, $http)
+//function jsoncrudctrl($scope, $location, $http)
+angular.module('jsoncrudapp', ['contenteditable'])
+	.controller('jsoncrudctrl', ['$scope', function($scope)
 {
 	var json = {
 		field1: "some text",
@@ -49,14 +51,8 @@ function jsoncrudctrl($scope, $location, $http)
 	$scope.isUndefined = function(obj) {
 		return ((typeof obj == "undefined") ? true : false);
 	}
-	$scope.deleteElement = function(key, maybeparent, betterparent)
+	$scope.deleteElement = function(key, obj)
 	{
-		var obj;
-		if(betterparent)
-			obj = betterparent;
-		else
-			obj = maybeparent;
-
 		var confirmed = true;
 		if(!$scope.isLeaf(obj[key]))
 			confirmed = confirm("Are you sure you want to delete an object/array?");
@@ -68,7 +64,7 @@ function jsoncrudctrl($scope, $location, $http)
 				delete obj[key];
 		}
 	}
-}
+}]);
 
 //puts all leafs into objects with the key __value__ so i can reference them in angular.
 function referencify(json)
