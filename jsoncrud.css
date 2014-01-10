@@ -1,0 +1,5 @@
+/*works, but makes focus weird... need to click twice to start typing*/
+[contentEditable=true]:empty:not(:focus):before {
+	content:attr(data-ph);
+	color:grey;
+}

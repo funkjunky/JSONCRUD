@@ -2,6 +2,7 @@
 	<head>
 		<title>JSON CRUD</title>
 		<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+		<link href="jsoncrud.css" rel="stylesheet">
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js"></script>
@@ -15,7 +16,8 @@
 			<span ng-if="!isLeaf(value)">Count: {{objlength(value)}}</span>
 			<ul ng-if="!isLeaf(value)" ng-show="!minimized">
 				<li ng-repeat="(key,value) in value" ng-include="'node.html'" onload="parent=$parent.$parent.$parent.value"></li>
-				<button type="button" ng-if="isArray(value)" ng-click="addToArray(value)">Add Element</button>
+				<button type="button" ng-if="isArray(value)" ng-click="addToArray(value)">Add Array Element</button>
+				<button type="button" ng-if="isObject(value)" ng-click="addToObject(value)">Add Object Element</button>
 			</ul>
 		</script>
 	</head>

@@ -11,34 +11,25 @@ angular.module('jsoncrudapp', ['contenteditable'])
 		},
 		field2: "loremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsum",
 	};
-	$scope.logger = function(str) { console.log(str); };
-	//The complexity of this function is only because it's jarring to change the order of object elements. If I had another solution for display order, then I could simply use the first two commented lines.
-	$scope.updateKey = function(object, key, $parent) {
-		//object[key] = object[$parent.key];
-		//delete object[$parent.key];
-		
-		//doing this JUST so the order is preserved when modifying a key.
-		var pastKey = false;
-		var kvpsAfter = {};
-		var value = object[$parent.key];
-		for(var k in object)
-		{
-			if(k === $parent.key)
-			{
-				pastKey = true;
-				delete object[k]	//remove element with old key
-				continue;
-			}
-			else if(pastKey)
-			{
-				kvpsAfter[k] = object[k];
-				delete object[k];
-			}
-		}
-		object[key] = value;
-		//readd past elements
-		for(var k in kvpsAfter)
-			object[k] = kvpsAfter[k];
+	$scope.value = json;
+
+	$scope.updateKey = updateKey;
+	$scope.isLeaf = function(obj) {
+		return (typeof obj !== "object")?true:false;
+	};
+	$scope.stringify = function(obj) {
+		return JSON.stringify(obj, null, '\t');
+	};
+	$scope.addToArray = function(arr) {
+		arr.push("");
+	};
+	var keyPrefix = "_key"; var keyCount = 0;
+	$scope.addToObject = function(object) {
+		object[keyPrefix + keyCount] = "";
+	};
+	$scope.isArray = Array.isArray;
+	$scope.isObject = function(obj) {
+		return (typeof obj === "object" && !Array.isArray(obj))?true:false;
 	};
 	$scope.objlength = function(obj) {
 		if(Array.isArray(obj))
@@ -51,16 +42,6 @@ angular.module('jsoncrudapp', ['contenteditable'])
 			return count;
 		}
 	};
-	$scope.value = json;
-	$scope.isLeaf = function(obj) {
-		return (typeof obj !== "object")?true:false;
-	};
-
-	$scope.stringify = stringify;
-	$scope.addToArray = function(arr) {
-		arr.push("");
-	}
-	$scope.isArray = Array.isArray;
 	$scope.loadJson = function(jsonUrl) {
 		$http.get(jsonUrl).success(function(json) {
 			$scope.value = json
@@ -96,43 +77,31 @@ function linkify(str)
 	});
 }
 
-function stringify(json, tabs)
-{
-	if(!tabs)
-		tabs = 1;
-
-	if(typeof json !== "object")
-		return (typeof json === 'string')
-			? '"' + json + '"'
-			: json;
-
-	var str = "";
-	if(Array.isArray(json)) //arrays use [] and write value,
+//The complexity of this function is only because it's jarring to change the order of object elements. If I had another solution for display order, then I could simply use the first two commented lines.
+function updateKey(object, key, $parent) {
+	//object[key] = object[$parent.key];
+	//delete object[$parent.key];
+	
+	//doing this JUST so the order is preserved when modifying a key.
+	var pastKey = false;
+	var kvpsAfter = {};
+	var value = object[$parent.key];
+	for(var k in object)
 	{
-		str = '[\n';
-		for(var i=0; i!=json.length; ++i)
-			str += ntimes('\t', tabs) + stringify(json[i], tabs+1) + ',\n';
-
-		str = str.substr(0,str.length-2) + '\n';
-		str += ntimes('\t', tabs-1) + ']';
+		if(k === $parent.key)
+		{
+			pastKey = true;
+			delete object[k]	//remove element with old key
+			continue;
+		}
+		else if(pastKey)
+		{
+			kvpsAfter[k] = object[k];
+			delete object[k];
+		}
 	}
-	else //objects use {} and write "key": value,
-	{
-		str = '{\n';
-		for(var key in json)
-			if(key != '$$hashkey') //no idea where that key is coming from
-				str += ntimes('\t', tabs) + '"' + key + '": ' + stringify(json[key], tabs+1) + ',\n';
-
-		str = str.substr(0,str.length-2) + '\n';
-		str += ntimes('\t', tabs-1) + '}';
-	}
-
-	return str;
-}
-function ntimes(str, times)
-{
-	var ret = "";
-	for(var i=0; i!=times; ++i)
-		ret += str;
-	return ret;
-}
+	object[key] = value;
+	//readd past elements
+	for(var k in kvpsAfter)
+		object[k] = kvpsAfter[k];
+};
