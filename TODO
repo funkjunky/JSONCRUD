@@ -1,7 +1,5 @@
 TODO
 ---
- - remove .___VALUE___ and use parent.value instead
- - autoamtically turn valid urls into anchor tags
  - Format it all pretty using bootstrap, and using jsonblob as a reference.
  - tesst with a saved version of a feed api json return.
 
@@ -9,6 +7,7 @@ TODO
  - add a setting for automatically minimizing a certain number of elements if on key has too many
  - add a setting for the number of nodes to load before adding pagination
  - add pagination.
+ - autoamtically turn valid urls into anchor tags
  - add settings
 	- automatically turning urls into anchor tags
 	- editing keys, adding elements to objects, adding elements to arrays

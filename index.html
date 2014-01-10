@@ -9,12 +9,12 @@
 		<script src="angularjsoncrud.js"></script>
 		<script type="text/ng-template" id="node.html">
 			<button ng-click="minimized = !minimized" ng-show="!isLeaf(value)" ng-init="minimized=false" ng-class="{'glyphicon glyphicon-plus': minimized, 'glyphicon glyphicon-minus': !minimized}">-</button>
-			<span contenteditable="true" ng-model="value.___KEY___" ng-if="!isArray(parent.value) && !isUndefined(key)" />
-			<span contenteditable="true" ng-if="isLeaf(value)" ng-model="value.___VALUE___" />
-			<button ng-click="deleteElement(key, parent.value)" ng-if="!isUndefined(key)">[x]</button>
+			<span contenteditable="true" ng-if="!isArray(parent) && !isUndefined(key)" ng-model="key" ng-change="updateKey(parent, key, $parent)">{{key}}</span>
+			<span contenteditable="true" ng-if="isLeaf(value)" ng-model="parent[key]" />
+			<button ng-click="deleteElement(key, parent)" ng-if="!isUndefined(key)">[x]</button>
 			<span ng-if="!isLeaf(value)">Count: {{objlength(value)}}</span>
 			<ul ng-if="!isLeaf(value)" ng-show="!minimized">
-				<li ng-repeat="(key,value) in value" ng-if="key != '___KEY___' && key != '___ISARRAY___'" ng-include="'node.html'" onload="parent=$parent.$parent.$parent.$parent"></li>
+				<li ng-repeat="(key,value) in value" ng-include="'node.html'" onload="parent=$parent.$parent.$parent.value"></li>
 				<button type="button" ng-if="isArray(value)" ng-click="addToArray(value)">Add Element</button>
 			</ul>
 		</script>

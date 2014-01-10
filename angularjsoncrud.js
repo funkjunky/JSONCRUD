@@ -11,8 +11,35 @@ angular.module('jsoncrudapp', ['contenteditable'])
 		},
 		field2: "loremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsumloremipsum",
 	};
-	json = referencify(json);
 	$scope.logger = function(str) { console.log(str); };
+	//The complexity of this function is only because it's jarring to change the order of object elements. If I had another solution for display order, then I could simply use the first two commented lines.
+	$scope.updateKey = function(object, key, $parent) {
+		//object[key] = object[$parent.key];
+		//delete object[$parent.key];
+		
+		//doing this JUST so the order is preserved when modifying a key.
+		var pastKey = false;
+		var kvpsAfter = {};
+		var value = object[$parent.key];
+		for(var k in object)
+		{
+			if(k === $parent.key)
+			{
+				pastKey = true;
+				delete object[k]	//remove element with old key
+				continue;
+			}
+			else if(pastKey)
+			{
+				kvpsAfter[k] = object[k];
+				delete object[k];
+			}
+		}
+		object[key] = value;
+		//readd past elements
+		for(var k in kvpsAfter)
+			object[k] = kvpsAfter[k];
+	};
 	$scope.objlength = function(obj) {
 		if(Array.isArray(obj))
 			return obj.length;
@@ -26,23 +53,17 @@ angular.module('jsoncrudapp', ['contenteditable'])
 	};
 	$scope.value = json;
 	$scope.isLeaf = function(obj) {
-		return (obj.___VALUE___ !== undefined)?true:false;
+		return (typeof obj !== "object")?true:false;
 	};
-	$scope.strlen = function(obj) {
-		var val = obj.___VALUE___;
-		if(typeof val === 'string')
-			return val.length;
-		else //is a number
-			return 1; //arbitrarily small number?
-	};
+
 	$scope.stringify = stringify;
 	$scope.addToArray = function(arr) {
-		arr.push({___VALUE___: ""});
+		arr.push("");
 	}
 	$scope.isArray = Array.isArray;
 	$scope.loadJson = function(jsonUrl) {
 		$http.get(jsonUrl).success(function(json) {
-			$scope.value = referencify(json);
+			$scope.value = json
 		}).error(function(err) {
 			console.log(err);
 			alert("loading the json failed");
@@ -63,23 +84,16 @@ angular.module('jsoncrudapp', ['contenteditable'])
 			else
 				delete obj[key];
 		}
-	}
+	};
+	$scope.linkify = linkify;
 }]);
 
-//puts all leafs into objects with the key __value__ so i can reference them in angular.
-function referencify(json)
+//To add links I'll need to ditch ng-model, which I don't want to yet.
+function linkify(str)
 {
-	for(var key in json)
-	{
-		if(angular.isObject(json[key])) {
-			json[key] = referencify(json[key]);
-			json[key]["___KEY___"] = key;
-		}
-		else
-			json[key] = {"___VALUE___": json[key], "___KEY___": key};
-	}
-
-	return json;
+	return str.replace(/(http:\/\/[^\w]*)/gi, function(match, p1, offset, string) {
+		return '<a href="' + p1 + '">' + p1 + '</a>';
+	});
 }
 
 function stringify(json, tabs)
@@ -87,10 +101,10 @@ function stringify(json, tabs)
 	if(!tabs)
 		tabs = 1;
 
-	if(json.___VALUE___ !== undefined)
-		return (typeof json.___VALUE___ === 'string')
-			? '"' + json.___VALUE___ + '"'
-			: json.___VALUE___;
+	if(typeof json !== "object")
+		return (typeof json === 'string')
+			? '"' + json + '"'
+			: json;
 
 	var str = "";
 	if(Array.isArray(json)) //arrays use [] and write value,
@@ -106,8 +120,8 @@ function stringify(json, tabs)
 	{
 		str = '{\n';
 		for(var key in json)
-			if(key != '$$hashkey' && key != '___KEY___') //no idea where that key is coming from
-				str += ntimes('\t', tabs) + '"' + json[key].___KEY___ + '": ' + stringify(json[key], tabs+1) + ',\n';
+			if(key != '$$hashkey') //no idea where that key is coming from
+				str += ntimes('\t', tabs) + '"' + key + '": ' + stringify(json[key], tabs+1) + ',\n';
 
 		str = str.substr(0,str.length-2) + '\n';
 		str += ntimes('\t', tabs-1) + '}';
